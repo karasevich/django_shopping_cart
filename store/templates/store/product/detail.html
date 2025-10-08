@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-5">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+            {% else %}
+                <img src="https://placehold.co/300x200/CCCCCC/333333?text=NO+IMAGE" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
+            {% endif %}
+        </div>
+
+        <div class="col-md-7">
+            <h1>{{ product.name }}</h1>
+            <p class="text-muted">Category:
+                <a href="{% url 'store:product_list_by_category' product.category.slug %}" class="text-decoration-none">
+                    {{ product.category }}
+                </a>
+            </p>
+
+            <h2 class="text-success fw-bold">{{ product.price }}</h2>
+
+            <hr>
+
+            <form action="{% url 'store:cart_add' product.id %}" method="post" class="mb-4">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <label for="{{ cart_product_form.quantity.id_for_label }}" class="col-sm-3 col-form-label">Quantity</label>
+                    <div class="col-sm-4">
+                        {{ cart_product_form.quantity }}
+                    </div>
+                    {{ cart_product_form.override }}
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-success">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+            </form>
+
+            <hr>
+
+            <h3>Product Description</h3>
+            <p class="lead">{{ product.description|linebreaks }}</p>
+        </div>
+    </div>
+{% endblock %}

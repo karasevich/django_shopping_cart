@@ -1,0 +1,72 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    {% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">{% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}</h1>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for product in products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <a href="{{ product.get_absolute_url }}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: contain;">
+                        {% else %}
+                            <img src="https://placehold.co/300x200/CCCCCC/333333?text=NO+IMAGE" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ product.get_absolute_url }}" class="text-dark text-decoration-none">{{ product.name }}</a></h5>
+                        <p class="card-text text-success fw-bold">{{ product.price }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm w-100">View Details</a>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <form action="{% url 'store:cart_add' product.id %}" method="post">
+                            {% csrf_token %}
+                            <!-- Hidden input to set quantity to 1 for quick addition -->
+                            <input type="hidden" name="quantity" value="1">
+
+                            <button type="submit" class="btn btn-info btn-sm w-100">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="alert alert-info">No products found in this category.</p>
+        {% endfor %}
+    </div>
+    {% if products.paginator.num_pages > 1 %}
+    <nav aria-label="Product list pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ products.number }} of {{ products.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+{% endblock %}
