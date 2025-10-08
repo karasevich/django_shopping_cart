@@ -17,9 +17,13 @@ Key Features
 ### Prerequisites
 
 - Docker and Docker Compose must be installed.
-
+- clone repository\
+```bash
+git clone https://github.com/karasevich/django_shopping_cart.git
+cd django_shopping_cart
+```
 - Configuration (.env file)
-To securely run the project, you need to create a file with environment variables.
+To securely run the project, you need to create a file with environment variables.\
 Create a file named .env in the project root directory, and fill it with your data. Docker Compose uses these values to configure PostgreSQL and create the superuser.
 
 ### Example variables that should be in your .env:
@@ -51,9 +55,9 @@ Creates a superuser, using data from .env.
 
 Access Addresses:
 
-Application: http://localhost:8000
+Application: http://127.0.0.1:8000
 
-Admin Panel: http://localhost:8000/admin/
+Admin Panel: http://127.0.0.1:8000/admin/
 
 ## API Testing with Pytest
 **Pytest Configuration**\
