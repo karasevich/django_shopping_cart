@@ -13,7 +13,7 @@ echo "--- Running database migrations..."
 python manage.py migrate --noinput
 
 echo "--- Loading local application data from fixtures/local_seed.json..."
-python manage.py loaddata local_seed.json || true
+#python manage.py loaddata local_seed.json || true
 
 # 2. Create Django Superuser if it does not exist
 # We use the environment variables defined in .env
